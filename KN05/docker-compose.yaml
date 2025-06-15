@@ -1,0 +1,22 @@
+version: "3.9"
+
+volumes:
+  shared-data:
+
+services:
+  nginx1:
+    image: nginx
+    volumes:
+      - type: volume
+        source: shared-data
+        target: /shared
+      - type: bind
+        source: ./html
+        target: /usr/share/nginx/html
+      - type: tmpfs
+        target: /tmpfs
+
+  nginx2:
+    image: nginx
+    volumes:
+      - shared-data:/shared
