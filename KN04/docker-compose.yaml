@@ -1,0 +1,39 @@
+version: '3.8'
+
+networks:
+  kn04net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.0.0/16
+          ip_range: 172.10.5.0/24
+          gateway: 172.10.5.254
+
+services:
+
+  db:
+    image: mariadb:latest
+    container_name: m347-kn04-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mydb
+    networks:
+      kn04net:
+        ipv4_address: 172.10.5.10
+    ports:
+      - "3307:3307"
+
+
+  web:
+    build:
+      context: ./web
+    container_name: m347-kn04-web
+    depends_on:
+      - db
+    ports:
+      - "8082:80"
+    networks:
+      kn04net:
+        ipv4_address: 172.10.5.11
+
+
