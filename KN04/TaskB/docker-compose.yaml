@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  kn04net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.100.254
+
+services:
+  db:
+    image: yaracorder0/m347:kn02b-db-image
+    container_name: m347-kn04b-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mydb
+    networks:
+      kn04net:
+        ipv4_address: 192.168.100.2
+    ports:
+      - "3308:3308"
+
+
+  web:
+    image: yaracorder0/m347:kn02b-web-image
+    container_name: m347-kn04b-web
+    depends_on:
+      - db
+    ports:
+      - "8083:80"
+    networks:
+      kn04net:
+        ipv4_address: 192.168.100.3
+
+

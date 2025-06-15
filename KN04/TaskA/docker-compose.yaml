@@ -26,7 +26,7 @@ services:
 
   web:
     build:
-      context: ./web
+      context: web
     container_name: m347-kn04-web
     depends_on:
       - db
